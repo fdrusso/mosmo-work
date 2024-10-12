@@ -1,0 +1,24 @@
+Gene ID	Gene Accession	Gene name	Reaction id	Reaction EC	Enzymatic activity	Evidence
+EG10576	b3236	mdh	MALATE-DEH-RXN	1.1.1.37	malate dehydrogenase	EV-EXP
+EG10948	b1479	maeA	MALATE-DEH-RXN	1.1.1.37	malate dehydrogenase (oxaloacetate-decarboxylating)	EV-EXP
+EG10402	b0720	gltA	CITSYN-RXN	2.3.3.1/2.3.3.16	citrate synthase	EV-EXP
+EG12316	b0118	acnB	ACONITATEDEHYDR-RXN	No EC#	citrate hydro-lyase	EV-EXP
+EG11325	b1276	acnA	ACONITATEDEHYDR-RXN	No EC#	citrate hydro-lyase (cis-aconitate-forming)	EV-EXP
+EG12316	b0118	acnB	ACONITATEHYDR-RXN	No EC#	D-threo-isocitrate hydro-lyase	EV-EXP
+EG11325	b1276	acnA	ACONITATEHYDR-RXN	No EC#	D-threo-isocitrate hydro-lyase (cis-aconitate-forming)	EV-EXP
+EG10489	b1136	icd	ISOCITDEH-RXN	1.1.1.42	isocitrate dehydrogenase	EV-EXP
+EG10979	b0726	sucA	2OXOGLUTARATEDEH-RXN	1.2.1.105	2-oxoglutarate dehydrogenase	EV-EXP
+EG10980	b0727	sucB	2OXOGLUTARATEDEH-RXN	1.2.1.105	2-oxoglutarate dehydrogenase	EV-EXP
+EG10543	b0116	lpd	2OXOGLUTARATEDEH-RXN	1.2.1.105	2-oxoglutarate dehydrogenase	EV-EXP
+EG10982	b0729	sucD	SUCCCOASYN-RXN	6.2.1.5	succinyl-CoA synthetase	EV-EXP
+EG10981	b0728	sucC	SUCCCOASYN-RXN	6.2.1.5	succinyl-CoA synthetase	EV-EXP
+EG10934	b0722	sdhD	SUCCINATE-DEHYDROGENASE-UBIQUINONE-RXN	1.3.5.1	succinate:quinone oxidoreductase	EV-EXP
+EG10933	b0721	sdhC	SUCCINATE-DEHYDROGENASE-UBIQUINONE-RXN	1.3.5.1	succinate:quinone oxidoreductase	EV-EXP
+EG10932	b0724	sdhB	SUCCINATE-DEHYDROGENASE-UBIQUINONE-RXN	1.3.5.1	succinate:quinone oxidoreductase	EV-EXP
+EG10931	b0723	sdhA	SUCCINATE-DEHYDROGENASE-UBIQUINONE-RXN	1.3.5.1	succinate:quinone oxidoreductase	EV-EXP
+EG11162	b2929	fumE	FUMHYDR-RXN	4.2.1.2	fumarase	EV-EXP
+G6903	b1675	fumD	FUMHYDR-RXN	4.2.1.2	fumarase	EV-EXP
+EG10356	b1612	fumA	FUMHYDR-RXN	4.2.1.2	fumarase A	EV-EXP
+EG10357	b4122	fumB	FUMHYDR-RXN	4.2.1.2	fumarase B	EV-EXP
+EG10358	b1611	fumC	FUMHYDR-RXN	4.2.1.2	fumarase C	EV-EXP
+EG12069	b2210	mqo	MALATE-DEHYDROGENASE-ACCEPTOR-RXN	1.1.5.4	malate:quinone oxidoreductase	EV-EXP
