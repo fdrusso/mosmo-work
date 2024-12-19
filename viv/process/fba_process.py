@@ -3,12 +3,12 @@ from typing import Union
 from vivarium.core.process import Process
 from vivarium.core.types import State, Update
 
-from mosmo.model import ReactionNetwork
+from mosmo.model import Pathway
 from mosmo.calc.fba_gd import FbaGd, ProductionObjective, ExclusionObjective
 
 
 class FbaProcess(Process):
-    """A Vivarium Process simulating a ReactionNetwork via gradient-descent FBA."""
+    """A Vivarium Process simulating a Pathway via gradient-descent FBA."""
 
     defaults = {
         'reactions': [],
@@ -24,7 +24,7 @@ class FbaProcess(Process):
         # Super __init__ sets self.parameters from defaults + config
         super().__init__(config)
 
-        self.network = ReactionNetwork(self.parameters['reactions'])
+        self.pw = Pathway(self.parameters['reactions'])
         self.drivers = self.parameters['drivers']
         self.boundaries = set(self.parameters['boundaries']) | self.drivers.keys()  # Drivers are also boundaries.
         self.pid_kp = self.parameters['pid_kp']
@@ -32,13 +32,13 @@ class FbaProcess(Process):
         self.pid_kd = self.parameters['pid_kd']
 
         # Set up the FBA problem. Everything not declared as a driver or boundary is an intermediate.
-        self.intermediates = [met for met in self.network.reactants if met not in self.boundaries]
+        self.intermediates = [met for met in self.pw.molecules if met not in self.boundaries]
         objectives = {
-            'drivers': ProductionObjective(self.network, {met: 0.0 for met, target in self.drivers.items()})
+            'drivers': ProductionObjective(self.pw, {met: 0.0 for met, target in self.drivers.items()})
         }
         for i, cycle in enumerate(self.parameters['futile_cycles']):
-            objectives[f'futile-break-{i}'] = ExclusionObjective(self.network, cycle)
-        self.fba = FbaGd(self.network, self.intermediates, objectives)
+            objectives[f'futile-break-{i}'] = ExclusionObjective(self.pw, cycle)
+        self.fba = FbaGd(self.pw, self.intermediates, objectives)
 
     def ports_schema(self):
         return {
@@ -47,7 +47,7 @@ class FbaProcess(Process):
                 met.id: {'_default': 0.0, '_emit': True} for met in self.boundaries
             },
             'fluxes': {
-                rxn.id: {'_default': 0.0, '_updater': 'set', '_emit': True} for rxn in self.network.reactions
+                rxn.id: {'_default': 0.0, '_updater': 'set', '_emit': True} for rxn in self.pw.reactions
             },
             'pid_data': {
                 'error': {met.id: {'_default': 0.0, '_updater': 'set', '_emit': False} for met in self.drivers},
@@ -75,11 +75,11 @@ class FbaProcess(Process):
 
         # Report rates of change for boundary metabolites, and flux for all reactions.
         dmdts = {}
-        for met, dmdt in self.network.reactants.unpack(soln.dmdt).items():
+        for met, dmdt in self.pw.molecules.unpack(soln.dmdt).items():
             if met in self.boundaries:
                 dmdts[met.id] = dmdt
         velocities = {}
-        for rxn, velocity in self.network.reactions.unpack(soln.velocities).items():
+        for rxn, velocity in self.pw.reactions.unpack(soln.velocities).items():
             velocities[rxn.id] = velocity
 
         return {
