@@ -262,7 +262,7 @@ class RxnEditGrid:
 
 def collect_reference_objects(ec_file, KB, ref_db):
     # Collect reference reactions cross-referenced to EC numbers
-    ref_rxns = set()
+    ref_rxns = []
     with open(ec_file, 'r') as f:
         for line in f.readlines():
             line = line.strip()
@@ -271,7 +271,9 @@ def collect_reference_objects(ec_file, KB, ref_db):
             ec_ref = DbXref(db=DS.EC, id=line)
             rxns = KB.xref(ref_db, ec_ref)
             if rxns:
-                ref_rxns.update(rxns)
+                for rxn in rxns:
+                    if rxn not in ref_rxns:
+                        ref_rxns.append(rxn)
             else:
                 print(f'{ec_ref} has no corresponding reactions in {ref_db.id}')
 
@@ -319,6 +321,7 @@ def build_mol_edit_tasks(ref_mols, KB, kb_mol_db):
             if kb_mol.id is not None:
                 covered[kb_mol] = task
 
+    # The original order of molecules is not meaningful. Sort them for easier editing.
     return sorted(tasks, key=lambda task: task.kb_mol.name)
 
 
@@ -367,4 +370,6 @@ def build_rxn_edit_tasks(ref_rxns, KB, kb_rxn_db, kb_mol_db):
         else:
             skipped.append(ref_rxn)
 
-    return sorted(tasks, key=lambda task: task.kb_rxn.name), skipped
+    # Preserve the order of the reactions from the original input
+    # return sorted(tasks, key=lambda task: task.kb_rxn.name), skipped
+    return tasks, skipped
