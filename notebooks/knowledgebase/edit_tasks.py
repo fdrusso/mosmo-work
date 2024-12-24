@@ -1,8 +1,10 @@
+import collections
 import copy
 
-import pandas as pd
+import chemparse
 from ipydatagrid import DataGrid
 from mosmo.model import DS, DbXref, Molecule
+import pandas as pd
 
 
 class MolEditTask:
@@ -373,3 +375,31 @@ def build_rxn_edit_tasks(ref_rxns, KB, kb_rxn_db, kb_mol_db):
     # Preserve the order of the reactions from the original input
     # return sorted(tasks, key=lambda task: task.kb_rxn.name), skipped
     return tasks, skipped
+
+def mass_imbalance(reaction):
+    net = collections.defaultdict(float)
+    for mol, stoich in reaction.stoichiometry.items():
+        for component, count in chemparse.parse_formula(mol.formula).items():
+            net[component] += stoich * count
+    return {component: count for component, count in net.items() if count != 0}
+
+def charge_imbalance(reaction):
+    net = 0
+    for mol, stoich in reaction.stoichiometry.items():
+        net += stoich * mol.charge
+    return net
+
+def check_reaction(reaction, ref_reaction=None):
+    imbalance = mass_imbalance(reaction)
+    charge = charge_imbalance(reaction)
+    if imbalance or charge:
+        print(f'{reaction}: mass imbalance = {imbalance}, charge imbalance = {charge}')
+        print()
+        print('reaction:')
+        for mol, count in reaction.stoichiometry.items():
+            print(f'  {count:>2d} {mol.formula:20} {mol}')
+        if ref_reaction:
+            print()
+            print('reference:')
+            for mol, count in ref_reaction.stoichiometry.items():
+                print(f'  {count:>2d} {mol.formula:20} {mol}')
