@@ -294,9 +294,9 @@ def build_mol_edit_tasks(ref_mols, KB, kb_mol_db):
         kb_mol.id = None  # Must be assigned to save it.
         kb_mol.db = None  # Assigned by KB on save
         if kb_mol.xrefs:
-            kb_mol.xrefs.add(ref_mol.ref())
+            kb_mol.xrefs.add(ref_mol.ref)
         else:
-            kb_mol.xrefs = {ref_mol.ref()}
+            kb_mol.xrefs = {ref_mol.ref}
         return kb_mol
 
     # Keep track of tasks by kb_mol to be edited.
@@ -305,7 +305,7 @@ def build_mol_edit_tasks(ref_mols, KB, kb_mol_db):
     covered = {}
     for ref_mol in ref_mols:
         # Use existing kb molecules where possible.
-        kb_mols = KB.xref(kb_mol_db, ref_mol.ref())
+        kb_mols = KB.xref(kb_mol_db, ref_mol.ref)
         if len(kb_mols) > 1:
             print(f'{ref_mol} maps to multiple KB entries.')
         if kb_mols:
@@ -333,7 +333,7 @@ def build_rxn_edit_tasks(ref_rxns, KB, kb_rxn_db, kb_mol_db):
         # Reactions using molecules missing from the kb are skipped.
         stoichiometry = {}
         for ref_mol, count in ref_rxn.stoichiometry.items():
-            kb_mols = KB.xref(kb_mol_db, ref_mol.ref())
+            kb_mols = KB.xref(kb_mol_db, ref_mol.ref)
             if len(kb_mols) == 1:
                 kb_mol = kb_mols[0]
                 if kb_mol.canonical_form is not None:
@@ -349,9 +349,9 @@ def build_rxn_edit_tasks(ref_rxns, KB, kb_rxn_db, kb_mol_db):
         kb_rxn.db = None  # Assigned by KB on save
         kb_rxn.stoichiometry = stoichiometry
         if kb_rxn.xrefs is not None:
-            kb_rxn.xrefs.add(ref_rxn.ref())
+            kb_rxn.xrefs.add(ref_rxn.ref)
         else:
-            kb_rxn.xrefs = {ref_rxn.ref()}
+            kb_rxn.xrefs = {ref_rxn.ref}
 
         return kb_rxn
 
@@ -359,7 +359,7 @@ def build_rxn_edit_tasks(ref_rxns, KB, kb_rxn_db, kb_mol_db):
     skipped = []
     for ref_rxn in ref_rxns:
         # Use existing kb reactions where possible.
-        kb_rxns = KB.xref(kb_rxn_db, ref_rxn.ref())
+        kb_rxns = KB.xref(kb_rxn_db, ref_rxn.ref)
         if len(kb_rxns) > 1:
             print(f'{ref_rxn} maps to multiple KB entries.')
         if kb_rxns:
